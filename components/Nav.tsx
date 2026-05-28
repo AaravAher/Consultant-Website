@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useScrollSnap } from '@/hooks/useScrollSnap';
 import { revealHeroContent } from '@/utils/revealHero';
 
@@ -13,6 +13,54 @@ const NAV_LINKS = [
 export default function Nav() {
   const activeSection = useScrollSnap();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+
+    const btn = document.querySelector('.nav-cta') as HTMLElement;
+    if (!btn) return;
+
+    let rect = btn.getBoundingClientRect();
+    const updateRect = () => { rect = btn.getBoundingClientRect(); };
+    window.addEventListener('scroll', updateRect, { passive: true });
+    window.addEventListener('resize', updateRect, { passive: true });
+
+    let rafId: number | null = null;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (rafId) return;
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+      
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const cx   = rect.left + rect.width  / 2;
+        const cy   = rect.top  + rect.height / 2;
+        const dx   = clientX - cx;
+        const dy   = clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const proximity = 80;
+
+        if (dist < proximity) {
+          const strength = (proximity - dist) / proximity;
+          btn.style.transform  = `translate(${dx * strength * 0.38}px, ${dy * strength * 0.38}px)`;
+          btn.style.transition = 'transform 80ms ease-out';
+        } else {
+          btn.style.transform  = 'translate(0, 0)';
+          btn.style.transition = 'transform 380ms ease-out';
+        }
+      });
+    };
+
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', updateRect);
+      window.removeEventListener('resize', updateRect);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
@@ -70,7 +118,7 @@ export default function Nav() {
           })}
           <button
             onClick={() => scrollToSection('contact')}
-            className={`text-[14px] font-medium tracking-[0.05em] transition-all duration-180 border rounded-[5px] px-[20px] py-[10px] ml-2 ${
+            className={`nav-cta text-[14px] font-medium tracking-[0.05em] transition-all duration-180 border rounded-[5px] px-[20px] py-[10px] ml-2 ${
               activeSection === 6
                 ? 'text-[#ffffff] border-[rgba(255,255,255,0.7)] bg-[rgba(255,255,255,0.06)]'
                 : 'text-[rgba(255,255,255,0.62)] border-[rgba(255,255,255,0.4)] hover:text-[#ffffff] hover:border-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.06)]'

@@ -206,12 +206,12 @@ export default function HeroSection() {
     <section id="hero" className="relative w-full bg-[#0c0e13] flex flex-col justify-center overflow-hidden" style={{ position: 'sticky', top: 0, height: '100vh', willChange: 'transform, opacity' }}>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 z-0 opacity-100"
+        className="absolute inset-0 z-0 opacity-100 scale-[1.2] origin-[65%_42%]"
       />
       
       <div className="relative z-10 px-6 md:px-12 pb-12 md:pb-24 pointer-events-none">
         <div className={`transition-all duration-[750ms] ease-out delay-150 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          <div className="text-[13px] font-[400] uppercase tracking-[0.18em] text-[rgba(255,255,255,0.45)]">
+          <div className="text-[14px] font-[400] uppercase tracking-[0.18em] text-[rgba(255,255,255,0.45)]">
             Minari Shah
           </div>
           <div className="text-[13px] font-[400] tracking-[0.10em] mt-2 mb-8 text-[rgba(255,255,255,0.32)]">
@@ -219,7 +219,7 @@ export default function HeroSection() {
           </div>
         </div>
         
-        <h1 className="text-[48px] md:text-[72px] lg:text-[84px] font-bold leading-[1.05] tracking-tight">
+        <h1 className="text-[clamp(22px,3vw,38px)] font-bold leading-[1.35] tracking-tight max-w-[800px]">
           <div className="overflow-hidden">
             <span className={`block text-[rgba(255,255,255,0.6)] transition-all duration-[750ms] ease-out delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               Most Companies call in communications
@@ -230,7 +230,7 @@ export default function HeroSection() {
               for coverage.
             </span>
           </div>
-          <div className="overflow-hidden mt-2 md:mt-4">
+          <div className="overflow-hidden mt-1 md:mt-2">
             <span className={`block text-white transition-all duration-[750ms] ease-out delay-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               I get called in when they have
             </span>
@@ -247,6 +247,25 @@ export default function HeroSection() {
           <span className="text-[12px] uppercase text-[rgba(255,255,255,0.40)] tracking-[0.16em]">
             Scroll to explore
           </span>
+        </div>
+      </div>
+
+      <div className="hero-ticker" aria-hidden="true">
+        <div className="hero-ticker-track">
+          <span>Market entry</span><span className="hero-ticker-sep">·</span>
+          <span>IPO narrative</span><span className="hero-ticker-sep">·</span>
+          <span>Crisis communications</span><span className="hero-ticker-sep">·</span>
+          <span>Investor storytelling</span><span className="hero-ticker-sep">·</span>
+          <span>Leadership alignment</span><span className="hero-ticker-sep">·</span>
+          <span>Board communications</span><span className="hero-ticker-sep">·</span>
+          <span>Change management</span><span className="hero-ticker-sep">·</span>
+          <span>Market entry</span><span className="hero-ticker-sep">·</span>
+          <span>IPO narrative</span><span className="hero-ticker-sep">·</span>
+          <span>Crisis communications</span><span className="hero-ticker-sep">·</span>
+          <span>Investor storytelling</span><span className="hero-ticker-sep">·</span>
+          <span>Leadership alignment</span><span className="hero-ticker-sep">·</span>
+          <span>Board communications</span><span className="hero-ticker-sep">·</span>
+          <span>Change management</span><span className="hero-ticker-sep">·</span>
         </div>
       </div>
     </section>

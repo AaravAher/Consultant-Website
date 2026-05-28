@@ -27,16 +27,6 @@ export function usePageTransition() {
         el.classList.add('revealed');
       });
 
-      if (target.id === 'track-record') {
-        const cards = target.querySelectorAll('.track-card-light, .track-card-featured');
-        cards.forEach((card, i) => {
-          setTimeout(() => {
-            (card as HTMLElement).style.opacity = '1';
-            (card as HTMLElement).style.transform = 'translateY(0)';
-          }, 60 + i * 80);
-        });
-      }
-
       if (target.id === 'brief') {
         const rows = target.querySelectorAll('.contrast-row');
         rows.forEach((row, i) => {
@@ -46,6 +36,9 @@ export function usePageTransition() {
           setTimeout(() => {
             (row as HTMLElement).style.opacity = '1';
             (row as HTMLElement).style.transform = 'translateY(0)';
+            setTimeout(() => {
+              (row as HTMLElement).style.transform = '';
+            }, 400);
           }, 80 + i * 60);
         });
       }

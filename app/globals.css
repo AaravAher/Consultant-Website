@@ -95,18 +95,19 @@ html, body {
 
 /* Track Record Grid Styles */
 .track-record-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr 1fr;
+  display: flex;
+  flex-direction: row;
   gap: 16px;
   align-items: stretch;
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 48px;
+  perspective: 1000px;
 }
 
 @media (max-width: 767px) {
   .track-record-grid {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
 }
 
@@ -154,11 +155,55 @@ html, body {
   margin-right: 4px;
 }
 
-.track-card-light,
+.track-card-light {
+  flex: 1 1 0;
+  min-width: 0;
+  transition:
+    flex 340ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 340ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 340ms ease,
+    opacity 340ms ease,
+    filter 340ms ease;
+}
+
 .track-card-featured {
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 400ms ease-out, transform 400ms ease-out;
+  flex: 1.15 1 0;   /* Amazon starts slightly wider by default */
+  min-width: 0;
+  transition:
+    flex 340ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 340ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 340ms ease,
+    opacity 340ms ease,
+    filter 340ms ease;
+}
+
+.track-card-light.card-dimmed,
+.track-card-featured.card-dimmed {
+  flex: 0.68 1 0;          /* gives up space to the active card */
+  transform: translateY(5px) scale(0.97);
+  opacity: 0.52;
+  filter: brightness(0.90);
+}
+
+.track-card-light.card-active,
+.track-card-featured.card-active {
+  flex: 1.72 1 0;          /* takes significantly more space */
+  transform: translateY(-10px) scale(1.02);
+  z-index: 3;
+}
+
+.track-card-light.card-active {
+  box-shadow:
+    0 0 0 1px rgba(77, 127, 168, 0.55),
+    0 12px 24px rgba(0, 0, 0, 0.10),
+    0 28px 56px rgba(0, 0, 0, 0.14);
+}
+
+.track-card-featured.card-active {
+  box-shadow:
+    0 0 0 1.5px rgba(125, 179, 212, 0.65),
+    0 12px 32px rgba(0, 0, 0, 0.28),
+    0 36px 72px rgba(0, 0, 0, 0.44);
 }
 
 /* Brief Section - Contrast Table */
@@ -302,4 +347,379 @@ html, body {
     border-bottom: 0.5px solid rgba(12, 14, 19, 0.08);
     padding: 4px 0;
   }
+}
+
+/* 2a. Brand logos */
+.card-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+.card-logo {
+  height: 20px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* 3. Credential Ticker */
+#credential-ticker {
+  width: 100%;
+  background: #ece5d4;
+  padding: 22px 64px;
+  border-top: 0.5px solid rgba(12, 14, 19, 0.08);
+  border-bottom: 0.5px solid rgba(12, 14, 19, 0.08);
+  user-select: none;
+}
+
+.ticker-static {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.ticker-item {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: rgba(12, 14, 19, 0.48);
+  white-space: nowrap;
+}
+
+.ticker-bullet {
+  font-size: 16px;
+  color: rgba(12, 14, 19, 0.18);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* 5. Floating Availability Badge */
+#availability-badge {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(10, 12, 17, 0.90);
+  border: 0.5px solid rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 10px 18px 10px 14px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.80);
+  letter-spacing: 0.02em;
+  transition: background 180ms ease, border-color 180ms ease;
+}
+#availability-badge:hover {
+  background: rgba(18, 22, 32, 0.96);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.avail-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  flex-shrink: 0;
+  position: relative;
+}
+.avail-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(74, 222, 128, 0.38);
+  animation: avail-pulse 2.2s ease-out infinite;
+}
+@keyframes avail-pulse {
+  0%   { transform: scale(1);   opacity: 1; }
+  70%  { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .avail-dot::after { animation: none; }
+}
+
+/* 6. When to Engage */
+.engage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(12, 14, 19, 0.08);
+  border: 1px solid rgba(12, 14, 19, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 52px;
+  margin-bottom: 48px;
+}
+.engage-cell {
+  background: #ece5d4;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  transition: background 220ms ease;
+}
+.engage-cell:hover { background: #e8e0ce; }
+.engage-num {
+  font-size: 72px;
+  font-weight: 500;
+  line-height: 1;
+  color: #4d7fa8;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+.engage-trigger {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #0c0e13;
+  margin-bottom: 10px;
+}
+.engage-desc {
+  font-size: 13px;
+  color: rgba(12, 14, 19, 0.55);
+  line-height: 1.6;
+}
+@media (max-width: 767px) {
+  .engage-grid { grid-template-columns: 1fr; }
+  .engage-num  { font-size: 56px; }
+}
+
+/* 7. How We Work */
+#how-we-work {
+  height: 100vh;
+  overflow: hidden;
+  background: #e4dcc8;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#waveform-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hww-header {
+  flex-shrink: 0;
+  padding: 72px 64px 32px;   /* 72px top clears the 68px fixed nav */
+  z-index: 2;
+  position: relative;
+}
+
+.hww-headline {
+  font-size: clamp(28px, 3.5vw, 46px);
+  font-weight: 500;
+  color: #0c0e13;
+  line-height: 1.1;
+  margin-top: 8px;
+}
+
+.hww-carousel-outer {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.hww-carousel-track {
+  display: flex;
+  width: 300%;          /* exactly 3 × 100vw */
+  height: 100%;
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.hww-panel {
+  width: calc(100% / 3);    /* = one viewport width */
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 64px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.hww-model-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(12, 14, 19, 0.38);
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.hww-wave {
+  width: 100%;
+  height: 100px;
+  display: block;
+  flex-shrink: 0;
+  margin-bottom: 36px;
+}
+
+.hww-panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+.hww-desc {
+  font-size: clamp(20px, 2.4vw, 30px);
+  font-weight: 500;
+  color: #0c0e13;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+.hww-services {
+  font-size: 14px;
+  color: rgba(12, 14, 19, 0.50);
+  line-height: 1.75;
+}
+
+.hww-bottom {
+  flex-shrink: 0;
+  padding: 20px 64px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.hww-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.hww-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(12, 14, 19, 0.18);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 200ms ease, transform 200ms ease;
+}
+
+.hww-dot.active {
+  background: rgba(12, 14, 19, 0.58);
+  transform: scale(1.35);
+}
+
+.hww-geo {
+  font-size: 11px;
+  color: rgba(12, 14, 19, 0.30);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 767px) {
+  .hww-header,
+  .hww-panel,
+  .hww-bottom { padding-left: 24px; padding-right: 24px; }
+  .hww-header { padding-top: 48px; }
+}
+
+/* 8. Contact */
+#contact {
+  background: #ece5d4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 48px;
+  position: relative;
+}
+.contact-headline {
+  font-size: clamp(52px, 8vw, 88px);
+  font-weight: 500;
+  color: #0c0e13;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 36px;
+}
+.contact-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.contact-link {
+  font-size: 18px;
+  color: rgba(12, 14, 19, 0.55);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: color 180ms ease;
+}
+.contact-link:hover { color: #4d7fa8; }
+.contact-sep {
+  font-size: 18px;
+  color: rgba(12, 14, 19, 0.22);
+}
+.contact-tagline {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 15px;
+  color: rgba(12, 14, 19, 0.55);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* 9. Hero Ticker */
+.hero-ticker {
+  position: absolute;
+  bottom: 56px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-ticker-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: hero-ticker-scroll 40s linear infinite;
+}
+@keyframes hero-ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.hero-ticker-track span {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.09em;
+  color: rgba(255, 255, 255, 0.20);
+  padding: 0 16px;
+  white-space: nowrap;
+}
+.hero-ticker-sep {
+  color: rgba(255, 255, 255, 0.10) !important;
+  padding: 0 4px !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-ticker-track { animation-play-state: paused; }
 }

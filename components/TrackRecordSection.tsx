@@ -1,4 +1,39 @@
+'use client';
+import { useEffect } from 'react';
+
 export default function TrackRecordSection() {
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+
+    const grid  = document.querySelector('.track-record-grid');
+    if (!grid) return;
+    const cards = grid.querySelectorAll('.track-card-light, .track-card-featured');
+
+    const handleMouseEnter = (card: Element) => {
+      cards.forEach(c => {
+        c.classList.toggle('card-dimmed', c !== card);
+        c.classList.toggle('card-active',  c === card);
+      });
+    };
+
+    const handleMouseLeave = () => {
+      cards.forEach(c => c.classList.remove('card-active', 'card-dimmed'));
+    };
+
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => handleMouseEnter(card));
+    });
+
+    grid.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      cards.forEach(card => {
+        // Just remove all classes on unmount to be safe
+        card.classList.remove('card-active', 'card-dimmed');
+      });
+      grid.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
   return (
     <section id="track-record" className="bg-[#ece5d4] pt-[80px] pb-[100px] flex flex-col">
       <div className="w-full mx-auto flex flex-col section-content">
@@ -19,7 +54,10 @@ export default function TrackRecordSection() {
           {/* Left Card: Tata Motors */}
           <div className="track-card-light">
             <div>
-              <div className="text-[20px] font-medium text-[#0c0e13]">Tata Motors</div>
+              <div className="card-name-row">
+                <span className="co-name text-[20px] font-medium text-[#0c0e13]">Tata Motors</span>
+                <img src="/Consultant-Website/logos/tata-motors.svg" alt="Tata Motors" className="card-logo" />
+              </div>
               <div className="text-[12px] font-[400] text-[rgba(12,14,19,0.42)] tracking-[0.04em]">Corporate brand strategy · India</div>
               <div className="h-[1px] bg-[rgba(12,14,19,0.08)] my-[20px]" />
             </div>
@@ -47,7 +85,10 @@ export default function TrackRecordSection() {
           {/* Center Card: Amazon */}
           <div className="track-card-featured order-first md:order-none">
             <div>
-              <div className="text-[20px] font-medium text-[#ffffff]">Amazon</div>
+              <div className="card-name-row">
+                <span className="co-name text-[20px] font-medium text-[#ffffff]">Amazon</span>
+                <img src="/Consultant-Website/logos/amazon.svg" alt="Amazon" className="card-logo" />
+              </div>
               <div className="text-[12px] font-[400] text-[rgba(255,255,255,0.42)] tracking-[0.04em]">Director · 8+ years · India, APAC, EU &amp; LatAm</div>
               <div className="h-[1px] bg-[rgba(255,255,255,0.10)] my-[20px]" />
             </div>
@@ -69,7 +110,10 @@ export default function TrackRecordSection() {
           {/* Right Card: Dell */}
           <div className="track-card-light">
             <div>
-              <div className="text-[20px] font-medium text-[#0c0e13]">Dell</div>
+              <div className="card-name-row">
+                <span className="co-name text-[20px] font-medium text-[#0c0e13]">Dell</span>
+                <img src="/Consultant-Website/logos/dell.svg" alt="Dell" className="card-logo" />
+              </div>
               <div className="text-[12px] font-[400] text-[rgba(12,14,19,0.42)] tracking-[0.04em]">Brand strategy · India market</div>
               <div className="h-[1px] bg-[rgba(12,14,19,0.08)] my-[20px]" />
             </div>

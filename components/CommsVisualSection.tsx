@@ -1,173 +1,185 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-
-function AudioWaveform() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let t = 0;
-    
-    let width = canvas.offsetWidth;
-    let height = canvas.offsetHeight;
-
-    const resize = () => {
-      width = canvas.parentElement?.offsetWidth || 300;
-      height = canvas.parentElement?.offsetHeight || 300;
-      canvas.width = width;
-      canvas.height = height;
-    };
-
-    window.addEventListener('resize', resize);
-    resize();
-
-    const layers = [
-      { amp: 20, freq: 0.022, speed: 0.55, color: 'rgba(77,127,168,0.65)',  lineWidth: 1.4 },
-      { amp: 12, freq: 0.036, speed: 0.85, color: 'rgba(42,127,110,0.45)',  lineWidth: 1.0 },
-      { amp: 6,  freq: 0.055, speed: 1.20, color: 'rgba(12,14,19,0.18)',    lineWidth: 0.7 },
-    ];
-
-    const draw = () => {
-      ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = '#e4dcc8'; // matches background alt
-      ctx.fillRect(0, 0, width, height);
-
-      // Faint center baseline
-      ctx.strokeStyle = 'rgba(12,14,19,0.07)';
-      ctx.lineWidth = 0.5;
-      ctx.beginPath();
-      ctx.moveTo(0, height / 2);
-      ctx.lineTo(width, height / 2);
-      ctx.stroke();
-
-      // Draw each layer
-      layers.forEach((layer) => {
-        ctx.strokeStyle = layer.color;
-        ctx.lineWidth = layer.lineWidth;
-        ctx.beginPath();
-        
-        for (let x = 0; x <= width; x++) {
-          const y = (height / 2) + Math.sin(x * layer.freq + t * layer.speed) * layer.amp + Math.sin(x * layer.freq * 1.6 + t * layer.speed * 0.6) * layer.amp * 0.35;
-          if (x === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        ctx.stroke();
-      });
-
-      t += 0.04;
-      animationFrameId = requestAnimationFrame(draw);
-    };
-
-    animationFrameId = requestAnimationFrame(draw);
-
-    return () => {
-      window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
-  return (
-    <div className="relative w-full h-[300px] lg:h-[400px] mx-auto md:mx-0">
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
-    </div>
-  );
-}
+import { useEffect } from 'react';
 
 const ENGAGEMENT_MODELS = [
   {
     label: "FRACTIONAL CCO",
     desc: "Ongoing strategic communications leadership embedded in your team.",
-    services: "Narrative & strategy architecture · Media & analyst relations · Social media & owned channels strategy · C-Suite communications & thought leadership · Internal communications strategy · Measurement metrics & impact goals"
+    services: "Narrative & strategy architecture · Media & analyst relations · Social media & owned channels · C-Suite communications & thought leadership · Internal communications strategy · Measurement & impact goals"
   },
   {
     label: "SPECIAL SITUATIONS",
     desc: "Focused engagement for high-stakes moments.",
-    services: "M&A and investor relations · Crisis and risk management · Market entry & scale-up communications · Business transformation & change management · Pre-/post-IPO narrative development · Investor decks, fact sheets, financial storytelling · Board communications support"
+    services: "M&A and investor relations · Crisis and risk management · Market entry & scale-up communications · Business transformation & change management · Pre-/post-IPO narrative development · Investor decks & financial storytelling · Board communications support"
   },
   {
     label: "PROJECT-BASED",
     desc: "Fixed-scope engagements and leadership workshops.",
-    services: "CXO Communications Workshops (90-min leadership bootcamp) · Fixed period 12–18 month build-outs · Audit & gap identification · Strategic narrative & positioning · Stakeholder mapping & execution · Customised strategy blueprint · Practical messaging playbook"
+    services: "CXO Communications Workshops (90-min leadership bootcamp) · Fixed period 12–18 month build-outs · Audit & gap identification · Strategic narrative & positioning · Stakeholder mapping & execution · Practical messaging playbook"
   }
 ];
 
 export default function CommsVisualSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.15,
-      }
-    );
+    const track = document.getElementById('hwwTrack');
+    const dots = document.querySelectorAll('.hww-dot');
+    const section = document.getElementById('how-we-work');
+    if (!track || !section) return;
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const panelCount = 3;
+    let current = 0;
+    let startX = 0;
+    let startY = 0;
+    let locked = false;
+
+    function goTo(index: number) {
+      current = Math.max(0, Math.min(panelCount - 1, index));
+      track!.style.transform = `translateX(-${current * (100 / panelCount)}%)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
     }
 
-    return () => observer.disconnect();
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => goTo(parseInt((dot as HTMLElement).dataset.index || '0')));
+    });
+
+    const handleTouchStart = (e: TouchEvent) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      locked = false;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (locked) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
+        goTo(dx < 0 ? current + 1 : current - 1);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const dx = Math.abs(e.touches[0].clientX - startX);
+      const dy = Math.abs(e.touches[0].clientY - startY);
+      if (dy > dx) locked = true;
+    };
+
+    section.addEventListener('touchstart', handleTouchStart as any, { passive: true });
+    section.addEventListener('touchend', handleTouchEnd as any, { passive: true });
+    section.addEventListener('touchmove', handleTouchMove as any, { passive: true });
+
+    let isDragging = false;
+    const handleMouseDown = (e: MouseEvent) => {
+      startX = e.clientX;
+      isDragging = true;
+    };
+    const handleMouseUp = (e: MouseEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 60) goTo(dx < 0 ? current + 1 : current - 1);
+    };
+
+    section.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top > window.innerHeight || rect.bottom < 0) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); goTo(current - 1); }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    const canvases = track.querySelectorAll('.hww-wave') as NodeListOf<HTMLCanvasElement>;
+    const layers = [
+      { amp: 18, freq: 0.022, speed: 0.55, color: 'rgba(77,127,168,0.55)',  lw: 1.4 },
+      { amp: 10, freq: 0.036, speed: 0.85, color: 'rgba(42,127,110,0.38)',  lw: 1.0 },
+      { amp: 5,  freq: 0.055, speed: 1.20, color: 'rgba(12,14,19,0.14)',    lw: 0.7 },
+    ];
+    let t = 0;
+    let animId: number;
+
+    function drawWaves() {
+      t += 0.04;
+      canvases.forEach((canvas) => {
+        const W = canvas.offsetWidth * devicePixelRatio;
+        const H = canvas.offsetHeight * devicePixelRatio;
+        if (canvas.width !== W) { canvas.width = W; canvas.height = H; }
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        ctx.clearRect(0, 0, W, H);
+
+        ctx.beginPath();
+        ctx.moveTo(0, H / 2);
+        ctx.lineTo(W, H / 2);
+        ctx.strokeStyle = 'rgba(12,14,19,0.06)';
+        ctx.lineWidth = 0.5 * devicePixelRatio;
+        ctx.stroke();
+
+        layers.forEach(({ amp, freq, speed, color, lw }) => {
+          ctx.beginPath();
+          // Step by 3 pixels to massively reduce iterations and path complexity without losing visual quality
+          for (let x = 0; x <= W; x += 3) {
+            const xn = x / devicePixelRatio;
+            const y = H / 2
+              + Math.sin(xn * freq + t * speed) * amp * devicePixelRatio
+              + Math.sin(xn * freq * 1.6 + t * speed * 0.6) * amp * 0.35 * devicePixelRatio;
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = color;
+          ctx.lineWidth = lw * devicePixelRatio;
+          ctx.stroke();
+        });
+      });
+      animId = requestAnimationFrame(drawWaves);
+    }
+
+    drawWaves();
+    goTo(0);
+
+    return () => {
+      section.removeEventListener('touchstart', handleTouchStart as any);
+      section.removeEventListener('touchend', handleTouchEnd as any);
+      section.removeEventListener('touchmove', handleTouchMove as any);
+      section.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('keydown', handleKeyDown);
+      cancelAnimationFrame(animId);
+    };
   }, []);
 
   return (
-    <section id="how-we-work" ref={sectionRef} className="bg-[#e4dcc8] px-6 md:px-[36px] py-12 md:py-[80px] flex flex-col justify-center min-h-screen page-snap-container">
-      <div className="w-full max-w-[1200px] mx-auto flex flex-col h-full justify-center section-content">
-        
-        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-16 items-center">
-          
-          {/* Left Column */}
-          <div className={`transition-all duration-700 ease-out flex flex-col ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'}`}>
-            <div className="text-[9px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.16em]">
-              ENGAGEMENT MODELS
+    <section id="how-we-work">
+      <div className="hww-header">
+        <div className="section-tag text-[9px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.16em]">ENGAGEMENT MODELS</div>
+        <div className="hww-headline">How we work together.</div>
+      </div>
+      
+      <div className="hww-carousel-outer">
+        <div className="hww-carousel-track" id="hwwTrack">
+          {ENGAGEMENT_MODELS.map((model, idx) => (
+            <div key={idx} className="hww-panel">
+              <div className="hww-model-label">{model.label}</div>
+              <canvas className="hww-wave"></canvas>
+              <div className="hww-panel-content">
+                <div className="hww-desc">{model.desc}</div>
+                <div className="hww-services">{model.services}</div>
+              </div>
             </div>
-            
-            <h2 className="text-[32px] md:text-[44px] font-medium text-[#0c0e13] leading-[1.2] mt-6 mb-10">
-              How we work together.
-            </h2>
-            
-            <div className="flex flex-col border-t border-[rgba(12,14,19,0.09)]">
-              {ENGAGEMENT_MODELS.map((model, idx) => (
-                <div key={idx} className="py-6 border-b border-[rgba(12,14,19,0.09)] flex flex-col">
-                  <div className="text-[12px] font-[500] text-[#0c0e13] tracking-[0.05em] uppercase mb-1">
-                    {model.label}
-                  </div>
-                  <div className="text-[14px] text-[rgba(12,14,19,0.75)] font-[400] mb-3">
-                    {model.desc}
-                  </div>
-                  <div className="text-[12px] text-[rgba(12,14,19,0.50)] font-[400] leading-[1.6]">
-                    {model.services}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-[11px] text-[rgba(12,14,19,0.38)] tracking-[0.04em] mt-8 uppercase">
-              Geographic depth: India & Asia-Pacific  |  Cross-cultural, multi-market strategy across APAC, EU & LatAm
-            </div>
-          </div>
-          
-          {/* Right Column */}
-          <div className={`flex justify-center w-full transition-all duration-700 ease-out delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'}`}>
-            <AudioWaveform />
-          </div>
-          
+          ))}
+        </div>
+      </div>
+      
+      <div className="hww-bottom">
+        <div className="hww-dots">
+          {ENGAGEMENT_MODELS.map((_, idx) => (
+            <button key={idx} className={`hww-dot ${idx === 0 ? 'active' : ''}`} data-index={idx} aria-label={`Go to panel ${idx + 1}`}></button>
+          ))}
+        </div>
+        <div className="hww-geo">
+          Geographic depth: India & Asia-Pacific &nbsp;|&nbsp;
+          Cross-cultural, multi-market strategy across APAC, EU & LatAm
         </div>
       </div>
     </section>

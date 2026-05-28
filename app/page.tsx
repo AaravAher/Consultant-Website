@@ -1,17 +1,21 @@
 'use client';
 
 import { usePageTransition } from '@/hooks/usePageTransition';
+import { useCursorGlow } from '@/hooks/useCursorGlow';
 import Nav from '@/components/Nav';
 import HeroSection from '@/components/HeroSection';
 import BriefSection from '@/components/BriefSection';
 import TrackRecordSection from '@/components/TrackRecordSection';
+import CredentialTicker from '@/components/CredentialTicker';
 import EngageSection from '@/components/EngageSection';
 import CommsVisualSection from '@/components/CommsVisualSection';
 import WorkSection from '@/components/WorkSection';
 import ContactSection from '@/components/ContactSection';
+import AvailabilityBadge from '@/components/AvailabilityBadge';
 
 export default function Home() {
   usePageTransition();
+  useCursorGlow();
 
   return (
     <>
@@ -22,11 +26,13 @@ export default function Home() {
         </div>
         <BriefSection />
         <TrackRecordSection />
+        <CredentialTicker />
         <EngageSection />
         <CommsVisualSection />
         <WorkSection />
         <ContactSection />
       </main>
+      <AvailabilityBadge />
     </>
   );
 }
