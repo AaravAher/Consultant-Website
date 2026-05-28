@@ -2,58 +2,53 @@
 
 import { useState } from 'react';
 import { useScrollSnap } from '@/hooks/useScrollSnap';
+import { revealHeroContent } from '@/utils/revealHero';
 
 const NAV_LINKS = [
-  { label: 'About', index: 1 },
-  { label: 'Experience', index: 2 },
-  { label: 'Work', index: 4 }, // CommVisual is index 3, Work is 4
+  { label: 'The Brief', id: 'brief', index: 1 },
+  { label: 'Track Record', id: 'track-record', index: 2 },
+  { label: 'Work', id: 'work', index: 5 },
 ];
 
 export default function Nav() {
   const activeSection = useScrollSnap();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const scrollToSection = (targetIndex: number) => {
+  const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
-
-    const executeScroll = () => {
-      const start = window.scrollY;
-      const isMobile = window.innerWidth < 768;
+    
+    if (id === 'home') {
+      const hero = document.getElementById('hero');
+      if (hero) {
+        hero.style.transition = 'transform 0ms, opacity 0ms';
+        hero.style.transform = '';
+        hero.style.opacity = '1';
+      }
       
-      let target = targetIndex * window.innerHeight;
-      if (isMobile) {
-        const sections = document.querySelectorAll('section');
-        if (sections[targetIndex]) {
-          target = (sections[targetIndex] as HTMLElement).offsetTop;
-        }
-      }
+      revealHeroContent();
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
 
-      const duration = 420;
-      const startTime = performance.now();
-
-      function ease(t: number) {
-        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-      }
-
-      function step(now: number) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        window.scrollTo(0, start + (target - start) * ease(progress));
-        if (progress < 1) requestAnimationFrame(step);
-      }
-
-      requestAnimationFrame(step);
-    };
-
-    executeScroll();
+    const section = document.getElementById(id);
+    if (!section) return;
+    const top = section.getBoundingClientRect().top + window.scrollY - 68;
+    window.scrollTo({ top, behavior: 'smooth' });
   };
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full h-[80px] z-[300] bg-[rgba(10,12,17,0.97)] backdrop-blur-[14px] border-b border-[rgba(255,255,255,0.12)] flex items-center justify-between px-6 md:px-12">
-        <div className="text-[18px] font-medium tracking-[0.10em] text-[#ffffff] cursor-pointer" onClick={() => scrollToSection(0)}>
+      <nav className="fixed top-0 left-0 w-full h-[80px] z-[9999] bg-[rgba(10,12,17,0.97)] backdrop-blur-[14px] border-b border-[rgba(255,255,255,0.12)] flex items-center justify-between px-6 md:px-12">
+        <a 
+          href="#" 
+          id="nav-home-link" 
+          aria-label="Return to top" 
+          className="text-[15px] font-medium tracking-[0.10em] text-[#ffffff] cursor-pointer hover:opacity-75 transition-opacity duration-180 ease-out no-underline" 
+          onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}
+        >
           Revwire.ai
-        </div>
+        </a>
         
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
@@ -62,7 +57,7 @@ export default function Nav() {
             return (
               <button
                 key={link.label}
-                onClick={() => scrollToSection(link.index)}
+                onClick={() => scrollToSection(link.id)}
                 className={`text-[14px] tracking-[0.05em] transition-colors duration-180 ease-out py-1 ${
                   isActive
                     ? 'text-[var(--color-accent-steel)] border-b border-[var(--color-accent-steel)]'
@@ -74,9 +69,9 @@ export default function Nav() {
             );
           })}
           <button
-            onClick={() => scrollToSection(5)} // Contact is index 5
+            onClick={() => scrollToSection('contact')}
             className={`text-[14px] font-medium tracking-[0.05em] transition-all duration-180 border rounded-[5px] px-[20px] py-[10px] ml-2 ${
-              activeSection === 5
+              activeSection === 6
                 ? 'text-[#ffffff] border-[rgba(255,255,255,0.7)] bg-[rgba(255,255,255,0.06)]'
                 : 'text-[rgba(255,255,255,0.62)] border-[rgba(255,255,255,0.4)] hover:text-[#ffffff] hover:border-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.06)]'
             }`}
@@ -106,18 +101,18 @@ export default function Nav() {
             Close
           </button>
           
-          <button onClick={() => scrollToSection(0)} className="text-[24px] text-[rgba(255,255,255,0.62)] hover:text-[#ffffff]">Home</button>
+          <button onClick={() => scrollToSection('home')} className="text-[24px] text-[rgba(255,255,255,0.62)] hover:text-[#ffffff]">Home</button>
           {NAV_LINKS.map((link) => (
             <button
               key={link.label}
-              onClick={() => scrollToSection(link.index)}
+              onClick={() => scrollToSection(link.id)}
               className="text-[24px] text-[rgba(255,255,255,0.62)] hover:text-[#ffffff]"
             >
               {link.label}
             </button>
           ))}
           <button
-            onClick={() => scrollToSection(5)}
+            onClick={() => scrollToSection('contact')}
             className="text-[24px] text-[var(--color-accent-steel)]"
           >
             Get in touch

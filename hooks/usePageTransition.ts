@@ -12,78 +12,52 @@ export function usePageTransition() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Inject overlay if it doesn't exist
-    let overlay = document.getElementById('page-transition-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'page-transition-overlay';
-      overlay.style.cssText = `
-        position: fixed;
-        inset: 0;
-        z-index: 200;
-        background: #0c0e13;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 160ms ease-in;
-      `;
-      document.body.appendChild(overlay);
-    }
-
-    // Attach global trigger for Nav
+    // Attach global trigger for Nav (no flash anymore, just scroll)
     window.triggerNavTransition = (onMidpoint: () => void) => {
-      const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (isReducedMotion) {
-        onMidpoint();
-        return;
-      }
-
-      if (!overlay) return;
-      overlay.style.transition = 'opacity 160ms ease-in';
-      overlay.style.opacity = '0.42';
-      
-      setTimeout(() => {
-        onMidpoint();
-        if (overlay) {
-          overlay.style.transition = 'opacity 280ms ease-out';
-          overlay.style.opacity = '0';
-        }
-      }, 160);
+      onMidpoint();
     };
 
-    // IntersectionObserver for natural scroll snapping (threshold 0.88)
+    // IntersectionObserver for natural scroll snapping (threshold 0.15)
     const sections = document.querySelectorAll('section');
     if (!sections.length) return;
 
     const revealSectionContent = (target: Element) => {
       const contentElements = target.querySelectorAll('.section-content');
       contentElements.forEach((el) => {
-        // Delay addition of .revealed by 60ms so overlay is at peak
-        setTimeout(() => {
-          el.classList.add('revealed');
-        }, 60);
+        el.classList.add('revealed');
       });
+
+      if (target.id === 'track-record') {
+        const cards = target.querySelectorAll('.track-card-light, .track-card-featured');
+        cards.forEach((card, i) => {
+          setTimeout(() => {
+            (card as HTMLElement).style.opacity = '1';
+            (card as HTMLElement).style.transform = 'translateY(0)';
+          }, 60 + i * 80);
+        });
+      }
+
+      if (target.id === 'brief') {
+        const rows = target.querySelectorAll('.contrast-row');
+        rows.forEach((row, i) => {
+          (row as HTMLElement).style.opacity = '0';
+          (row as HTMLElement).style.transform = 'translateY(8px)';
+          (row as HTMLElement).style.transition = 'opacity 360ms ease-out, transform 360ms ease-out';
+          setTimeout(() => {
+            (row as HTMLElement).style.opacity = '1';
+            (row as HTMLElement).style.transform = 'translateY(0)';
+          }, 80 + i * 60);
+        });
+      }
     };
 
     const sectionObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          if (!isReducedMotion && overlay) {
-            // Flash overlay briefly
-            overlay.style.transition = 'opacity 120ms ease-in';
-            overlay.style.opacity = '0.28';
-            setTimeout(() => {
-              if (overlay) {
-                overlay.style.transition = 'opacity 220ms ease-out';
-                overlay.style.opacity = '0';
-              }
-            }, 120);
-          }
-          
           revealSectionContent(entry.target);
         }
       });
-    }, { threshold: 0.88 });
+    }, { threshold: 0.15 });
 
     sections.forEach((section) => sectionObserver.observe(section));
 

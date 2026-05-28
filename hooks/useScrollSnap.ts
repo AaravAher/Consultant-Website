@@ -3,37 +3,43 @@
 import { useState, useEffect } from 'react';
 
 export function useScrollSnap() {
-  const [activeSection, setActiveSection] = useState<number>(0);
+  const [activeSection, setActiveSection] = useState<number>(-1);
 
   useEffect(() => {
-    // Only run on client
     if (typeof window === 'undefined') return;
 
     const sections = Array.from(document.querySelectorAll('section'));
     if (!sections.length) return;
 
+    function onScroll() {
+      if (window.scrollY < window.innerHeight * 0.5) {
+        setActiveSection(-1);
+      }
+    }
+    
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          if (entry.isIntersecting) {
             const index = sections.indexOf(entry.target as HTMLElement);
-            if (index !== -1) {
+            if (index > 0 && window.scrollY >= window.innerHeight * 0.4) {
               setActiveSection(index);
             }
           }
         });
       },
       {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.51, // Triggers when slightly more than half is visible
+        threshold: 0.4,
       }
     );
 
-    sections.forEach((section) => observer.observe(section));
+    sections.slice(1).forEach((section) => observer.observe(section));
+    onScroll();
 
     return () => {
-      sections.forEach((section) => observer.unobserve(section));
+      window.removeEventListener('scroll', onScroll);
       observer.disconnect();
     };
   }, []);

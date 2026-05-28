@@ -1,11 +1,84 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { revealHeroContent } from '@/utils/revealHero';
 
 export default function HeroSection() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mounted, setMounted] = useState(false);
   
+  useEffect(() => {
+    const wrapper = document.getElementById('hero-scroll-wrapper');
+    const hero = document.getElementById('hero');
+    if (!wrapper || !hero) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const heroH = window.innerHeight;
+    let lastScrollY = window.scrollY;
+    let isReturningToTop = false;
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const scrollingUp = scrollY < lastScrollY;
+
+      // Guard: if a smooth scroll-to-top is already in progress, ignore events
+      if (isReturningToTop) {
+        lastScrollY = scrollY;
+        return;
+      }
+
+      // Scroll-UP crossing back into hero territory: skip the dead zone
+      if (scrollingUp && lastScrollY >= heroH && scrollY < heroH) {
+        isReturningToTop = true;
+        // Reset hero to full visibility immediately before scrolling
+        hero!.style.transition = 'transform 0ms, opacity 0ms';
+        hero!.style.transform = '';
+        hero!.style.opacity = '1';
+        hero!.style.willChange = 'auto';
+
+        revealHeroContent();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Release the guard after the smooth scroll completes (~600ms)
+        setTimeout(() => {
+          isReturningToTop = false;
+        }, 700);
+
+        lastScrollY = scrollY;
+        return;
+      }
+
+      lastScrollY = scrollY;
+
+      // Hero fully exited downward — freeze at final state
+      if (scrollY >= heroH) {
+        hero!.style.transition = 'none';
+        hero!.style.transform = 'scale(0.86) translateZ(-130px)';
+        hero!.style.opacity = '0';
+        hero!.style.willChange = 'auto';
+        return;
+      }
+
+      // Active animation zone (scrolling down, 0 → heroH)
+      const progress = scrollY / heroH;
+      const eased = progress * progress;
+
+      hero!.style.transition = 'none';
+      hero!.style.willChange = 'transform, opacity';
+      hero!.style.transform = `scale(${1 - eased * 0.14}) translateZ(${-(eased * 130)}px)`;
+      hero!.style.opacity = String(Math.max(0, 1 - eased * 1.1));
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
   useEffect(() => {
     setMounted(true);
     // Particle network animation
@@ -130,39 +203,49 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen bg-[#0c0e13] flex flex-col justify-center overflow-hidden page-snap-container">
+    <section id="hero" className="relative w-full bg-[#0c0e13] flex flex-col justify-center overflow-hidden" style={{ position: 'sticky', top: 0, height: '100vh', willChange: 'transform, opacity' }}>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 z-0 opacity-100"
       />
       
       <div className="relative z-10 px-6 md:px-12 pb-12 md:pb-24 pointer-events-none">
-        <div className="text-[16px] md:text-[20px] font-bold uppercase tracking-[0.16em] mb-6 text-[rgba(255,255,255,0.55)]">
-          Communications & PR Counsel
+        <div className={`transition-all duration-[750ms] ease-out delay-150 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className="text-[13px] font-[400] uppercase tracking-[0.18em] text-[rgba(255,255,255,0.45)]">
+            Minari Shah
+          </div>
+          <div className="text-[13px] font-[400] tracking-[0.10em] mt-2 mb-8 text-[rgba(255,255,255,0.32)]">
+            Fractional CCO &nbsp;&middot;&nbsp; Strategic Communications
+          </div>
         </div>
         
         <h1 className="text-[48px] md:text-[72px] lg:text-[84px] font-bold leading-[1.05] tracking-tight">
           <div className="overflow-hidden">
-            <span className={`block text-white transition-all duration-[750ms] ease-out delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-              I help organizations
+            <span className={`block text-[rgba(255,255,255,0.6)] transition-all duration-[750ms] ease-out delay-300 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              Most Companies call in communications
             </span>
           </div>
           <div className="overflow-hidden">
-            <span className={`block text-white transition-all duration-[750ms] ease-out delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-              communicate clearly.
+            <span className={`block text-[rgba(255,255,255,0.6)] transition-all duration-[750ms] ease-out delay-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              for coverage.
             </span>
           </div>
           <div className="overflow-hidden mt-2 md:mt-4">
-            <span className={`block text-[rgba(255,255,255,0.6)] transition-all duration-[750ms] ease-out delay-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-              When it matters most.
+            <span className={`block text-white transition-all duration-[750ms] ease-out delay-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              I get called in when they have
+            </span>
+          </div>
+          <div className="overflow-hidden">
+            <span className={`block text-white transition-all duration-[750ms] ease-out delay-[800ms] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+              a business problem.
             </span>
           </div>
         </h1>
 
-        <div className={`mt-12 flex items-center gap-4 transition-all duration-[750ms] ease-out delay-[900ms] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+        <div className={`mt-12 flex items-center gap-4 transition-all duration-[750ms] ease-out delay-[950ms] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
           <div className="w-[32px] h-[2px] bg-[rgba(255,255,255,0.40)]" />
           <span className="text-[12px] uppercase text-[rgba(255,255,255,0.40)] tracking-[0.16em]">
-            Minari Shah
+            Scroll to explore
           </span>
         </div>
       </div>

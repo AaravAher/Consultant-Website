@@ -2,46 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-// CountUp component
-function StatBlock({ value, label, shouldAnimate }: { value: number, label: string, shouldAnimate: boolean }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!shouldAnimate) return;
-
-    let startTime: number | null = null;
-    const duration = 1200;
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = timestamp - startTime;
-      
-      // easeOutExpo
-      const easeProgress = progress === duration ? 1 : 1 - Math.pow(2, -10 * progress / duration);
-      
-      if (progress < duration) {
-        setCount(Math.floor(easeProgress * value));
-        requestAnimationFrame(animate);
-      } else {
-        setCount(value);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }, [shouldAnimate, value]);
-
-  return (
-    <div className="flex flex-col">
-      <div className="text-[36px] md:text-[40px] font-medium text-[#4d7fa8] leading-none tracking-[-0.01em]">
-        {count}{value === 6 ? '' : '+'}
-      </div>
-      <div className="text-[10px] text-[rgba(12,14,19,0.32)] uppercase tracking-[0.08em] mt-3 leading-[1.5]">
-        {label}
-      </div>
-    </div>
-  );
-}
-
 function AudioWaveform() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -116,11 +76,29 @@ function AudioWaveform() {
   }, []);
 
   return (
-    <div className="relative w-full h-[300px] mx-auto md:mx-0">
+    <div className="relative w-full h-[300px] lg:h-[400px] mx-auto md:mx-0">
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
     </div>
   );
 }
+
+const ENGAGEMENT_MODELS = [
+  {
+    label: "FRACTIONAL CCO",
+    desc: "Ongoing strategic communications leadership embedded in your team.",
+    services: "Narrative & strategy architecture · Media & analyst relations · Social media & owned channels strategy · C-Suite communications & thought leadership · Internal communications strategy · Measurement metrics & impact goals"
+  },
+  {
+    label: "SPECIAL SITUATIONS",
+    desc: "Focused engagement for high-stakes moments.",
+    services: "M&A and investor relations · Crisis and risk management · Market entry & scale-up communications · Business transformation & change management · Pre-/post-IPO narrative development · Investor decks, fact sheets, financial storytelling · Board communications support"
+  },
+  {
+    label: "PROJECT-BASED",
+    desc: "Fixed-scope engagements and leadership workshops.",
+    services: "CXO Communications Workshops (90-min leadership bootcamp) · Fixed period 12–18 month build-outs · Audit & gap identification · Strategic narrative & positioning · Stakeholder mapping & execution · Customised strategy blueprint · Practical messaging playbook"
+  }
+];
 
 export default function CommsVisualSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -137,7 +115,7 @@ export default function CommsVisualSection() {
         });
       },
       {
-        threshold: 0.35,
+        threshold: 0.15,
       }
     );
 
@@ -149,30 +127,44 @@ export default function CommsVisualSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-[#e4dcc8] px-6 md:px-[36px] py-12 md:py-[60px] flex flex-col justify-center page-snap-container">
+    <section id="how-we-work" ref={sectionRef} className="bg-[#e4dcc8] px-6 md:px-[36px] py-12 md:py-[80px] flex flex-col justify-center min-h-screen page-snap-container">
       <div className="w-full max-w-[1200px] mx-auto flex flex-col h-full justify-center section-content">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-16 items-center">
           
           {/* Left Column */}
-          <div className={`transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'}`}>
+          <div className={`transition-all duration-700 ease-out flex flex-col ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'}`}>
             <div className="text-[9px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.16em]">
-              Reach
+              ENGAGEMENT MODELS
             </div>
             
-            <h2 className="text-[28px] md:text-[36px] font-medium text-[#0c0e13] leading-[1.2] max-w-[420px] mt-6">
-              The right message, to the right people, at the right moment.
+            <h2 className="text-[32px] md:text-[44px] font-medium text-[#0c0e13] leading-[1.2] mt-6 mb-10">
+              How we work together.
             </h2>
             
-            <div className="flex gap-[42px] mt-10">
-              <StatBlock value={20} label="Years of practice" shouldAnimate={isVisible} />
-              <StatBlock value={40} label="Engagements" shouldAnimate={isVisible} />
-              <StatBlock value={6} label="Sectors" shouldAnimate={isVisible} />
+            <div className="flex flex-col border-t border-[rgba(12,14,19,0.09)]">
+              {ENGAGEMENT_MODELS.map((model, idx) => (
+                <div key={idx} className="py-6 border-b border-[rgba(12,14,19,0.09)] flex flex-col">
+                  <div className="text-[12px] font-[500] text-[#0c0e13] tracking-[0.05em] uppercase mb-1">
+                    {model.label}
+                  </div>
+                  <div className="text-[14px] text-[rgba(12,14,19,0.75)] font-[400] mb-3">
+                    {model.desc}
+                  </div>
+                  <div className="text-[12px] text-[rgba(12,14,19,0.50)] font-[400] leading-[1.6]">
+                    {model.services}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-[11px] text-[rgba(12,14,19,0.38)] tracking-[0.04em] mt-8 uppercase">
+              Geographic depth: India & Asia-Pacific  |  Cross-cultural, multi-market strategy across APAC, EU & LatAm
             </div>
           </div>
           
           {/* Right Column */}
-          <div className={`flex justify-center md:justify-end w-full transition-all duration-700 ease-out delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'}`}>
+          <div className={`flex justify-center w-full transition-all duration-700 ease-out delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[18px]'}`}>
             <AudioWaveform />
           </div>
           
