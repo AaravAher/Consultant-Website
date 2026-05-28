@@ -76,27 +76,6 @@ export default function BriefSection() {
 
         {/* Who I Work With Pills */}
         <div className="wiww-section">
-          <svg
-            className="wiww-bg-arc"
-            viewBox="0 0 900 480"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M -40 380 C 120 260, 340 420, 520 280 S 780 80, 960 180"
-              fill="none"
-              stroke="rgba(12,14,19,0.055)"
-              strokeWidth="1"
-              strokeLinecap="round"
-            />
-            <path
-              d="M -40 420 C 100 300, 300 460, 500 310 S 800 100, 980 200"
-              fill="none"
-              stroke="rgba(12,14,19,0.030)"
-              strokeWidth="0.7"
-              strokeLinecap="round"
-            />
-          </svg>
           <p className="wiww-label">WHO I WORK WITH</p>
           <div className="wiww-list">
 
