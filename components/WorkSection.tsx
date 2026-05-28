@@ -81,7 +81,7 @@ export default function WorkSection() {
             <div 
               key={index} 
               ref={(el) => { rowsRef.current[index] = el; }}
-              className={`reveal-hidden flex flex-col md:flex-row gap-2 md:gap-12 py-[24px] border-b border-[rgba(12,14,19,0.09)]`}
+              className={`work-entry reveal-hidden px-6 -mx-6 flex flex-col md:flex-row gap-2 md:gap-12 py-[24px] border-b border-[rgba(12,14,19,0.09)]`}
             >
               <div className="md:w-[220px] shrink-0 pt-1">
                 <div className="text-[11px] font-[500] text-[#0c0e13] tracking-[0.08em] uppercase">

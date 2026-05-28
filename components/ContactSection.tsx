@@ -3,6 +3,18 @@
 export default function ContactSection() {
   return (
     <section id="contact">
+      <svg
+        className="contact-rings"
+        viewBox="0 0 800 800"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <circle cx="400" cy="400" r="90"  fill="none" stroke="rgba(12,14,19,0.055)" strokeWidth="0.5"/>
+        <circle cx="400" cy="400" r="170" fill="none" stroke="rgba(12,14,19,0.042)" strokeWidth="0.5"/>
+        <circle cx="400" cy="400" r="260" fill="none" stroke="rgba(12,14,19,0.032)" strokeWidth="0.5"/>
+        <circle cx="400" cy="400" r="360" fill="none" stroke="rgba(12,14,19,0.022)" strokeWidth="0.5"/>
+        <circle cx="400" cy="400" r="470" fill="none" stroke="rgba(12,14,19,0.014)" strokeWidth="0.5"/>
+      </svg>
       <div className="contact-inner section-content">
         <div className="contact-headline">Let's talk.</div>
         <div className="contact-links">

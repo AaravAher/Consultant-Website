@@ -216,6 +216,33 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 36px 1fr;
   border-bottom: 0.5px solid rgba(12, 14, 19, 0.07);
+  transition: background 200ms ease;
+  cursor: default;
+}
+
+.contrast-row:hover {
+  background: rgba(12, 14, 19, 0.03);
+}
+
+.contrast-left {
+  position: relative;
+  display: inline-block;
+}
+
+.contrast-left::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 0.5px;
+  background: rgba(12, 14, 19, 0.40);
+  transition: width 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-50%);
+}
+
+.contrast-row:hover .contrast-left::after {
+  width: 100%;
 }
 
 .contrast-row:last-child {
@@ -298,8 +325,26 @@ html, body {
 
 /* Brief Section - Who I Work With Pills */
 .wiww-section {
+  position: relative;
   margin-top: 72px;
   padding: 0 64px 80px;
+}
+
+.wiww-bg-arc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+
+.wiww-label,
+.wiww-list {
+  position: relative;
+  z-index: 1;
 }
 
 .wiww-label {
@@ -510,6 +555,12 @@ html, body {
 }
 
 /* 6. When to Engage */
+.engage-label {
+  font-size: 13px;
+  letter-spacing: 0.10em;
+  color: rgba(12, 14, 19, 0.52);
+}
+
 .engage-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -550,6 +601,77 @@ html, body {
   color: rgba(12, 14, 19, 0.55);
   line-height: 1.6;
 }
+
+.engage-flip-wrap {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.engage-flip-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 520ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.engage-flip-wrap.flipped .engage-flip-card {
+  transform: rotateY(180deg);
+}
+
+.engage-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  padding: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.engage-back {
+  transform: rotateY(180deg);
+  background: #1a2332;
+  border-radius: inherit;
+  padding: 28px 28px 24px;
+  justify-content: space-between;
+}
+
+.engage-back-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.40);
+  margin-bottom: 16px;
+}
+
+.engage-back-body {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.engage-back-cta {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #7db3d4;
+  text-decoration: none;
+  border-bottom: 0.5px solid rgba(125, 179, 212, 0.40);
+  padding-bottom: 2px;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.engage-back-cta:hover {
+  color: #a8cfe3;
+  border-color: rgba(168, 207, 227, 0.60);
+}
+
 @media (max-width: 767px) {
   .engage-grid { grid-template-columns: 1fr; }
   .engage-num  { font-size: 56px; }
@@ -687,6 +809,33 @@ html, body {
   z-index: 2;
 }
 
+/* 7.5 Selected Work Hover Sweep */
+.work-entry {
+  position: relative;
+  transition: background 220ms ease;
+  overflow: hidden;
+}
+
+.work-entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2.5px;
+  height: 0;
+  background: #4d7fa8;
+  border-radius: 0 2px 2px 0;
+  transition: height 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.work-entry:hover {
+  background: rgba(77, 127, 168, 0.04);
+}
+
+.work-entry:hover::before {
+  height: 100%;
+}
+
 .hww-dots {
   display: flex;
   gap: 8px;
@@ -723,6 +872,7 @@ html, body {
 
 /* 8. Contact */
 #contact {
+  position: relative;
   background: #ece5d4;
   min-height: 100vh;
   display: flex;
@@ -731,8 +881,25 @@ html, body {
   justify-content: center;
   text-align: center;
   padding: 80px 48px;
-  position: relative;
 }
+
+.contact-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(800px, 100vw);
+  height: min(800px, 100vh);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ensure all contact content sits above the rings */
+#contact > *:not(.contact-rings) {
+  position: relative;
+  z-index: 1;
+}
+
 .contact-headline {
   font-size: clamp(52px, 8vw, 88px);
   font-weight: 500;

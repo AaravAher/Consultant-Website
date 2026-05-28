@@ -3,10 +3,26 @@
 import { useEffect, useRef } from 'react';
 
 const SCENARIOS = [
-  { trigger: 'Market entry', desc: "You're entering a new market next quarter and don't know how to talk to regulators." },
-  { trigger: 'IPO readiness', desc: "You're 18 months from IPO and your story doesn't hold." },
-  { trigger: 'Leadership transition', desc: "You've just brought in a new CEO and the internal narrative is fractured." },
-  { trigger: 'Fundraising', desc: "You're a founder who needs investors to understand why you exist, not just what you sell." },
+  { 
+    trigger: 'MARKET ENTRY', 
+    desc: "You're entering a new market next quarter and don't know how to talk to regulators.",
+    backBody: "I map the regulatory and stakeholder landscape first, then build the narrative that earns you permission to operate — before you launch, not after."
+  },
+  { 
+    trigger: 'IPO READINESS', 
+    desc: "You're 18 months from IPO and your story doesn't hold.",
+    backBody: "The story has to work for investors, analysts, and employees simultaneously. I build that unified narrative and stress-test it before the roadshow begins."
+  },
+  { 
+    trigger: 'LEADERSHIP TRANSITION', 
+    desc: "You've just brought in a new CEO and the internal narrative is fractured.",
+    backBody: "Internal alignment comes before external announcement. I build the communications architecture that lets the new leader land with credibility — internally first, then out."
+  },
+  { 
+    trigger: 'FUNDRAISING', 
+    desc: "You're a founder who needs investors to understand why you exist, not just what you sell.",
+    backBody: "Purpose and proof have to coexist in the same sentence. I shape the founding story and investor narrative so the \"why\" is never in doubt — and the \"what\" follows naturally."
+  },
 ];
 
 export default function EngageSection() {
@@ -45,7 +61,7 @@ export default function EngageSection() {
         
           {/* Header */}
           <div className="flex flex-col">
-            <div className="text-[9px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.16em]">
+            <div className="engage-label">
               SITUATIONS
             </div>
             <h2 className="text-[32px] md:text-[44px] font-medium text-[#0c0e13] leading-[1.2] mt-6">
@@ -59,19 +75,31 @@ export default function EngageSection() {
               <div 
                 key={index}
                 ref={(el) => { cardsRef.current[index] = el; }}
-                className="engage-cell reveal-hidden"
+                className="engage-cell engage-flip-wrap reveal-hidden h-[340px] md:h-[360px]"
+                onClick={(e) => e.currentTarget.classList.toggle('flipped')}
               >
-                <div className="engage-num">0{index + 1}</div>
-                <div className="engage-trigger">{sc.trigger}</div>
-                <div className="engage-desc">{sc.desc}</div>
+                <div className="engage-flip-card">
+                  <div className="engage-face engage-front">
+                    <span className="engage-num">0{index + 1}</span>
+                    <p className="engage-title engage-trigger">{sc.trigger}</p>
+                    <p className="engage-desc">{sc.desc}</p>
+                  </div>
+                  <div className="engage-face engage-back">
+                    <p className="engage-back-label">{sc.trigger}</p>
+                    <p className="engage-back-body">{sc.backBody}</p>
+                    <div>
+                      <a href="#contact" className="engage-back-cta">Let&apos;s talk &rarr;</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
 
           {/* Closing Line */}
-          <div className="text-[16px] text-[rgba(12,14,19,0.50)] font-[400] italic">
-            If communication can remove a business roadblock, that's when we should talk.
-          </div>
+          <p className="engage-quote text-[16px] text-[rgba(12,14,19,0.50)] font-[400] italic">
+            &ldquo;If communication can remove a business roadblock, that&apos;s when we should talk.&rdquo;
+          </p>
 
       </div>
     </section>
