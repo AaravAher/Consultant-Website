@@ -6,17 +6,44 @@ const ENGAGEMENT_MODELS = [
   {
     label: "FRACTIONAL CCO",
     desc: "Ongoing strategic communications leadership embedded in your team.",
-    services: "Narrative & strategy architecture · Media & analyst relations · Social media & owned channels · C-Suite communications & thought leadership · Internal communications strategy · Measurement & impact goals"
+    services: (
+      <>
+        <span className="hww-svc">Narrative &amp; strategy architecture</span>
+        <span className="hww-svc">Media &amp; analyst relations</span>
+        <span className="hww-svc">Social media &amp; owned channels</span>
+        <span className="hww-svc">C-Suite communications &amp; thought leadership</span>
+        <span className="hww-svc">Internal communications strategy</span>
+        <span className="hww-svc">Measurement &amp; impact goals</span>
+      </>
+    )
   },
   {
     label: "SPECIAL SITUATIONS",
     desc: "Focused engagement for high-stakes moments.",
-    services: "M&A and investor relations · Crisis and risk management · Market entry & scale-up communications · Business transformation & change management · Pre-/post-IPO narrative development · Investor decks & financial storytelling · Board communications support"
+    services: (
+      <>
+        <span className="hww-svc">M&amp;A and investor relations</span>
+        <span className="hww-svc">Crisis and risk management</span>
+        <span className="hww-svc">Market entry &amp; scale-up communications</span>
+        <span className="hww-svc">Business transformation &amp; change management</span>
+        <span className="hww-svc">Pre-/post-IPO narrative development</span>
+        <span className="hww-svc">Investor decks &amp; financial storytelling</span>
+      </>
+    )
   },
   {
     label: "PROJECT-BASED",
     desc: "Fixed-scope engagements and leadership workshops.",
-    services: "CXO Communications Workshops (90-min leadership bootcamp) · Fixed period 12–18 month build-outs · Audit & gap identification · Strategic narrative & positioning · Stakeholder mapping & execution · Practical messaging playbook"
+    services: (
+      <>
+        <span className="hww-svc">CXO Communications Workshops</span>
+        <span className="hww-svc">Fixed period 12–18 month build-outs</span>
+        <span className="hww-svc">Audit &amp; gap identification</span>
+        <span className="hww-svc">Strategic narrative &amp; positioning</span>
+        <span className="hww-svc">Stakeholder mapping &amp; execution</span>
+        <span className="hww-svc">Practical messaging playbook</span>
+      </>
+    )
   }
 ];
 

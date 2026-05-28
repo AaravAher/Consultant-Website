@@ -75,16 +75,40 @@ export default function BriefSection() {
         </div>
 
         {/* Who I Work With Pills */}
-        <div className="who-section">
-          <div className="who-tag">
-            WHO I WORK WITH
-          </div>
-          <div className="who-pills">
-            {whoIWorkWith.map((item, idx) => (
-              <div key={idx} className="who-pill">
-                {item}
-              </div>
-            ))}
+        <div className="wiww-section">
+          <p className="wiww-label">WHO I WORK WITH</p>
+          <div className="wiww-list">
+
+            <div className="wiww-pill">
+              <span className="wiww-num">01</span>
+              <span className="wiww-text">Global companies entering or recalibrating for India</span>
+              <span className="wiww-desc">Market entry &middot; brand repositioning</span>
+            </div>
+
+            <div className="wiww-pill">
+              <span className="wiww-num">02</span>
+              <span className="wiww-text">Founders navigating scale, pivots or investor pressure</span>
+              <span className="wiww-desc">Series A &rarr; growth &middot; narrative shaping</span>
+            </div>
+
+            <div className="wiww-pill">
+              <span className="wiww-num">03</span>
+              <span className="wiww-text">Listed and pre-IPO companies building investor narratives</span>
+              <span className="wiww-desc">Roadshow prep &middot; financial communications</span>
+            </div>
+
+            <div className="wiww-pill">
+              <span className="wiww-num">04</span>
+              <span className="wiww-text">Organisations in transition or transformation</span>
+              <span className="wiww-desc">Restructure &middot; relaunch &middot; M&amp;A</span>
+            </div>
+
+            <div className="wiww-pill">
+              <span className="wiww-num">05</span>
+              <span className="wiww-text">PE firms and boards</span>
+              <span className="wiww-desc">Portfolio communications &middot; governance</span>
+            </div>
+
           </div>
         </div>
 
