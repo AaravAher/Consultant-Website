@@ -18,15 +18,15 @@ export default function Nav() {
     const sectionIds = [
       'revwire', 'engage', 'work-together', 'track-record', 'about', 'contact'
     ];
-    const navLinks = document.querySelectorAll('.nav-link[data-section]');
+    const navItems = document.querySelectorAll('[data-section]');
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            navLinks.forEach(link => link.classList.remove('nav-active'));
+            navItems.forEach(link => link.classList.remove('nav-active'));
             const active = document.querySelector(
-              `.nav-link[data-section="${entry.target.id}"]`
+              `[data-section="${entry.target.id}"]`
             );
             if (active) active.classList.add('nav-active');
           }
@@ -42,6 +42,25 @@ export default function Nav() {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
+
+    function initMagneticContact() {
+      const btn = document.querySelector('a.nav-cta') as HTMLElement;
+      if (!btn) return;
+
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const cx   = rect.left + rect.width  / 2;
+        const cy   = rect.top  + rect.height / 2;
+        const dx   = (e.clientX - cx) * 0.38;
+        const dy   = (e.clientY - cy) * 0.38;
+        btn.style.transform = `translate(${dx}px, ${dy}px)`;
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0, 0)';
+      });
+    }
+    initMagneticContact();
 
     return () => observer.disconnect();
   }, []);
@@ -72,18 +91,17 @@ export default function Nav() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full h-[80px] z-[9999] bg-[rgba(10,12,17,0.97)] backdrop-blur-[14px] border-b border-[rgba(255,255,255,0.12)] flex items-center justify-between px-6 md:px-12 site-nav">
+      <nav className="site-nav">
         <a 
           href="#" 
-          className="nav-logo text-[15px] font-medium tracking-[0.10em] text-[#ffffff] cursor-pointer hover:opacity-75 transition-opacity duration-180 ease-out no-underline" 
+          className="nav-logo" 
           onClick={(e) => scrollToSection('home', e)}
         >
           Revwire.ai
         </a>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <ul className="nav-links">
+        <ul className="nav-links hidden md:flex">
             {NAV_LINKS.map((link) => (
               <li key={link.id}>
                 <a 
@@ -99,13 +117,12 @@ export default function Nav() {
           </ul>
           <a 
             href="#contact" 
-            className="nav-cta nav-link" 
+            className="nav-cta hidden md:inline-flex" 
             data-section="contact"
             onClick={(e) => scrollToSection('contact', e)}
           >
             Contact
           </a>
-        </div>
 
         {/* Mobile Hamburger */}
         <button 
