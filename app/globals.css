@@ -961,10 +961,10 @@ html, body {
   100% { transform: translateX(-50%); }
 }
 .hero-ticker-track span {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.09em;
-  color: rgba(255, 255, 255, 0.20);
+  color: rgba(255, 255, 255, 0.30);
   padding: 0 16px;
   white-space: nowrap;
 }

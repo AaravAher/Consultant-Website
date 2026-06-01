@@ -25,11 +25,12 @@ export default function Home() {
           <HeroSection />
         </div>
         <BriefSection />
-        <TrackRecordSection />
-        <CredentialTicker />
         <EngageSection />
         <CommsVisualSection />
+        <TrackRecordSection />
+        <CredentialTicker />
         <WorkSection />
+        <section id="about"></section>
         <ContactSection />
       </main>
       <AvailabilityBadge />

@@ -248,10 +248,31 @@ export default function HeroSection() {
             Scroll to explore
           </span>
         </div>
+        
+        <div className={`transition-all duration-[750ms] ease-out delay-[1100ms] ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+          <div className="hero-chips">
+            <span className="hero-chip">Growth</span>
+            <span className="hero-chip">Trust</span>
+            <span className="hero-chip">Alignment</span>
+            <span className="hero-chip">Investor confidence</span>
+            <span className="hero-chip">Market access</span>
+          </div>
+          <div className="hero-problem-text">
+            <p className="hero-problem-line1">Those are the problems.</p>
+            <p className="hero-problem-line2">And that&apos;s where I work.</p>
+          </div>
+        </div>
       </div>
 
       <div className="hero-ticker" aria-hidden="true">
         <div className="hero-ticker-track">
+          <span>Market entry</span><span className="hero-ticker-sep">·</span>
+          <span>IPO narrative</span><span className="hero-ticker-sep">·</span>
+          <span>Crisis communications</span><span className="hero-ticker-sep">·</span>
+          <span>Investor storytelling</span><span className="hero-ticker-sep">·</span>
+          <span>Leadership alignment</span><span className="hero-ticker-sep">·</span>
+          <span>Board communications</span><span className="hero-ticker-sep">·</span>
+          <span>Change management</span><span className="hero-ticker-sep">·</span>
           <span>Market entry</span><span className="hero-ticker-sep">·</span>
           <span>IPO narrative</span><span className="hero-ticker-sep">·</span>
           <span>Crisis communications</span><span className="hero-ticker-sep">·</span>

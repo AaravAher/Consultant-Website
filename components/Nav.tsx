@@ -1,68 +1,53 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useScrollSnap } from '@/hooks/useScrollSnap';
 import { revealHeroContent } from '@/utils/revealHero';
 
 const NAV_LINKS = [
-  { label: 'The Brief', id: 'brief', index: 1 },
-  { label: 'Track Record', id: 'track-record', index: 2 },
-  { label: 'Work', id: 'work', index: 5 },
+  { label: 'What is Revwire?', id: 'revwire' },
+  { label: 'When to Engage', id: 'engage' },
+  { label: 'How We Work Together', id: 'work-together' },
+  { label: 'Selected Work', id: 'track-record' },
+  { label: 'About Minari', id: 'about' },
 ];
 
 export default function Nav() {
-  const activeSection = useScrollSnap();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia('(max-width: 767px)').matches) return;
+    const sectionIds = [
+      'revwire', 'engage', 'work-together', 'track-record', 'about', 'contact'
+    ];
+    const navLinks = document.querySelectorAll('.nav-link[data-section]');
 
-    const btn = document.querySelector('.nav-cta') as HTMLElement;
-    if (!btn) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navLinks.forEach(link => link.classList.remove('nav-active'));
+            const active = document.querySelector(
+              `.nav-link[data-section="${entry.target.id}"]`
+            );
+            if (active) active.classList.add('nav-active');
+          }
+        });
+      },
+      {
+        rootMargin: '-38% 0px -38% 0px',
+        threshold: 0
+      }
+    );
 
-    let rect = btn.getBoundingClientRect();
-    const updateRect = () => { rect = btn.getBoundingClientRect(); };
-    window.addEventListener('scroll', updateRect, { passive: true });
-    window.addEventListener('resize', updateRect, { passive: true });
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
 
-    let rafId: number | null = null;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (rafId) return;
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-      
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-        const cx   = rect.left + rect.width  / 2;
-        const cy   = rect.top  + rect.height / 2;
-        const dx   = clientX - cx;
-        const dy   = clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        const proximity = 80;
-
-        if (dist < proximity) {
-          const strength = (proximity - dist) / proximity;
-          btn.style.transform  = `translate(${dx * strength * 0.38}px, ${dy * strength * 0.38}px)`;
-          btn.style.transition = 'transform 80ms ease-out';
-        } else {
-          btn.style.transform  = 'translate(0, 0)';
-          btn.style.transition = 'transform 380ms ease-out';
-        }
-      });
-    };
-
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('scroll', updateRect);
-      window.removeEventListener('resize', updateRect);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
+    return () => observer.disconnect();
   }, []);
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = (id: string, e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
     setMobileMenuOpen(false);
     
     if (id === 'home') {
@@ -87,45 +72,39 @@ export default function Nav() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full h-[80px] z-[9999] bg-[rgba(10,12,17,0.97)] backdrop-blur-[14px] border-b border-[rgba(255,255,255,0.12)] flex items-center justify-between px-6 md:px-12">
+      <nav className="fixed top-0 left-0 w-full h-[80px] z-[9999] bg-[rgba(10,12,17,0.97)] backdrop-blur-[14px] border-b border-[rgba(255,255,255,0.12)] flex items-center justify-between px-6 md:px-12 site-nav">
         <a 
           href="#" 
-          id="nav-home-link" 
-          aria-label="Return to top" 
-          className="text-[15px] font-medium tracking-[0.10em] text-[#ffffff] cursor-pointer hover:opacity-75 transition-opacity duration-180 ease-out no-underline" 
-          onClick={(e) => { e.preventDefault(); scrollToSection('home'); }}
+          className="nav-logo text-[15px] font-medium tracking-[0.10em] text-[#ffffff] cursor-pointer hover:opacity-75 transition-opacity duration-180 ease-out no-underline" 
+          onClick={(e) => scrollToSection('home', e)}
         >
           Revwire.ai
         </a>
         
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => {
-            const isActive = activeSection === link.index;
-            return (
-              <button
-                key={link.label}
-                onClick={() => scrollToSection(link.id)}
-                className={`text-[14px] tracking-[0.05em] transition-colors duration-180 ease-out py-1 ${
-                  isActive
-                    ? 'text-[var(--color-accent-steel)] border-b border-[var(--color-accent-steel)]'
-                    : 'text-[rgba(255,255,255,0.62)] border-b border-transparent hover:text-[#ffffff] hover:border-[rgba(255,255,255,0.18)]'
-                }`}
-              >
-                {link.label}
-              </button>
-            );
-          })}
-          <button
-            onClick={() => scrollToSection('contact')}
-            className={`nav-cta text-[14px] font-medium tracking-[0.05em] transition-all duration-180 border rounded-[5px] px-[20px] py-[10px] ml-2 ${
-              activeSection === 6
-                ? 'text-[#ffffff] border-[rgba(255,255,255,0.7)] bg-[rgba(255,255,255,0.06)]'
-                : 'text-[rgba(255,255,255,0.62)] border-[rgba(255,255,255,0.4)] hover:text-[#ffffff] hover:border-[rgba(255,255,255,0.7)] hover:bg-[rgba(255,255,255,0.06)]'
-            }`}
+          <ul className="nav-links">
+            {NAV_LINKS.map((link) => (
+              <li key={link.id}>
+                <a 
+                  href={`#${link.id}`} 
+                  className="nav-link" 
+                  data-section={link.id}
+                  onClick={(e) => scrollToSection(link.id, e)}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a 
+            href="#contact" 
+            className="nav-cta nav-link" 
+            data-section="contact"
+            onClick={(e) => scrollToSection('contact', e)}
           >
-            Get in touch
-          </button>
+            Contact
+          </a>
         </div>
 
         {/* Mobile Hamburger */}
@@ -149,7 +128,7 @@ export default function Nav() {
             Close
           </button>
           
-          <button onClick={() => scrollToSection('home')} className="text-[24px] text-[rgba(255,255,255,0.62)] hover:text-[#ffffff]">Home</button>
+          <button onClick={(e) => scrollToSection('home', e)} className="text-[24px] text-[rgba(255,255,255,0.62)] hover:text-[#ffffff]">Home</button>
           {NAV_LINKS.map((link) => (
             <button
               key={link.label}
@@ -163,7 +142,7 @@ export default function Nav() {
             onClick={() => scrollToSection('contact')}
             className="text-[24px] text-[var(--color-accent-steel)]"
           >
-            Get in touch
+            Contact
           </button>
         </div>
       )}

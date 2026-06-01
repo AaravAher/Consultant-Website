@@ -36,7 +36,7 @@ export default function BriefSection() {
   ];
 
   return (
-    <section id="brief" className="bg-[#ece5d4] pt-[80px] pb-[100px] flex flex-col justify-center">
+    <section id="revwire" className="bg-[#ece5d4] pt-[80px] pb-[100px] flex flex-col justify-center">
       <div className="w-full max-w-[1100px] mx-auto flex flex-col section-content px-6 md:px-[48px]">
         
         {/* Header */}

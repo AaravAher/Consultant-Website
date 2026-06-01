@@ -51,7 +51,7 @@ export default function CommsVisualSection() {
   useEffect(() => {
     const track = document.getElementById('hwwTrack');
     const dots = document.querySelectorAll('.hww-dot');
-    const section = document.getElementById('how-we-work');
+    const section = document.getElementById('work-together');
     if (!track || !section) return;
 
     const panelCount = 3;
@@ -177,7 +177,7 @@ export default function CommsVisualSection() {
   }, []);
 
   return (
-    <section id="how-we-work">
+    <section id="work-together">
       <div className="hww-header">
         <div className="section-tag text-[9px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.16em]">ENGAGEMENT MODELS</div>
         <div className="hww-headline">How we work together.</div>
