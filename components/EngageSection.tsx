@@ -3,26 +3,41 @@
 import { useEffect, useRef } from 'react';
 
 const SCENARIOS = [
-  { 
-    trigger: 'MARKET ENTRY', 
-    desc: "You're entering a new market next quarter and don't know how to talk to regulators.",
-    backBody: "I map the regulatory and stakeholder landscape first, then build the narrative that earns you permission to operate — before you launch, not after."
+  {
+    title: 'Global companies entering or recalibrating for India',
+    backLabel: 'GLOBAL COMPANIES — INDIA',
+    backBody: "Market entry, regulatory positioning and brand repositioning for reputation and stakeholder management for firms navigating India's complex competitive and policy landscape."
   },
-  { 
-    trigger: 'IPO READINESS', 
-    desc: "You're 18 months from IPO and your story doesn't hold.",
-    backBody: "The story has to work for investors, analysts, and employees simultaneously. I build that unified narrative and stress-test it before the roadshow begins."
+  {
+    title: 'Founders navigating scale, pivots or investor pressure',
+    backLabel: 'FOUNDER POSITIONING & GROWTH NARRATIVES',
+    backBody: 'Founders and D2C brands seeking to break through the clutter with sharper positioning, differentiated market narratives and stronger returns from marketing, communications and social investments.'
   },
-  { 
-    trigger: 'LEADERSHIP TRANSITION', 
-    desc: "You've just brought in a new CEO and the internal narrative is fractured.",
-    backBody: "Internal alignment comes before external announcement. I build the communications architecture that lets the new leader land with credibility — internally first, then out."
+  {
+    title: 'Listed and pre-IPO companies building investor narratives',
+    backLabel: 'IPO & INVESTOR NARRATIVE',
+    backBody: 'Companies at inflection points, navigating scale, transformation, IPOs and post-IPO transitions, where investor confidence, stakeholder trust and reputation must evolve alongside business growth — with a unified story that investors, analysts and employees all need to believe.'
   },
-  { 
-    trigger: 'FUNDRAISING', 
-    desc: "You're a founder who needs investors to understand why you exist, not just what you sell.",
-    backBody: "Purpose and proof have to coexist in the same sentence. I shape the founding story and investor narrative so the \"why\" is never in doubt — and the \"what\" follows naturally."
+  {
+    title: 'Organisations in transition or transformation',
+    backLabel: 'TRANSFORMATION & CHANGE',
+    backBody: 'Restructure, relaunch, M&A integration and generational transitions that require communication to provide direction, stabilise culture and help stakeholders understand not just what is changing, but why it matters and what comes next.'
   },
+  {
+    title: 'PE firms and boards',
+    backLabel: 'PE & BOARD COMMUNICATIONS',
+    backBody: 'Portfolio communications, governance and enterprise-value creation across PE-backed businesses, requiring nuanced multi-stakeholder communication strategy and execution.'
+  },
+  {
+    title: 'Leadership transitions & executive communications',
+    backLabel: 'LEADERSHIP TRANSITIONS',
+    backBody: 'New CEOs, founder succession, leadership restructuring or organisational change where confidence, alignment and clarity are critical. Build the narrative for leadership transitions, align employees and stakeholders behind the new direction, and support executive visibility with investors, customers, regulators and partners.'
+  },
+  {
+    title: 'Reputation recovery & crisis navigation',
+    backLabel: 'REPUTATION & CRISIS',
+    backBody: 'Organisations facing reputational, regulatory or operational challenges that require clear stakeholder engagement, trust rebuilding and disciplined narrative management.'
+  }
 ];
 
 export default function EngageSection() {
@@ -65,7 +80,7 @@ export default function EngageSection() {
               SITUATIONS
             </div>
             <h2 className="text-[32px] md:text-[44px] font-medium text-[#0c0e13] leading-[1.2] mt-6">
-              When to call.
+              When should you call RevWire?
             </h2>
           </div>
 
@@ -75,21 +90,18 @@ export default function EngageSection() {
               <div 
                 key={index}
                 ref={(el) => { cardsRef.current[index] = el; }}
-                className="engage-cell engage-flip-wrap reveal-hidden h-[340px] md:h-[360px]"
+                className="engage-flip-wrap reveal-hidden"
                 onClick={(e) => e.currentTarget.classList.toggle('flipped')}
               >
                 <div className="engage-flip-card">
                   <div className="engage-face engage-front">
                     <span className="engage-num">0{index + 1}</span>
-                    <p className="engage-title engage-trigger">{sc.trigger}</p>
-                    <p className="engage-desc">{sc.desc}</p>
+                    <p className="engage-title">{sc.title}</p>
                   </div>
                   <div className="engage-face engage-back">
-                    <p className="engage-back-label">{sc.trigger}</p>
+                    <p className="engage-back-label">{sc.backLabel}</p>
                     <p className="engage-back-body">{sc.backBody}</p>
-                    <div>
-                      <a href="#contact" className="engage-back-cta">Let&apos;s talk &rarr;</a>
-                    </div>
+                    <a href="#contact" className="engage-back-cta">Let&apos;s talk &rarr;</a>
                   </div>
                 </div>
               </div>
@@ -97,7 +109,7 @@ export default function EngageSection() {
           </div>
 
           {/* Closing Line */}
-          <p className="engage-quote text-[16px] text-[rgba(12,14,19,0.50)] font-[400] italic">
+          <p className="engage-quote text-[16px] text-[rgba(12,14,19,0.50)] font-[400] italic mt-12">
             &ldquo;If communication can remove a business roadblock, that&apos;s when we should talk.&rdquo;
           </p>
 

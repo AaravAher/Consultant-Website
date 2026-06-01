@@ -7,8 +7,9 @@ const NAV_LINKS = [
   { label: 'What is Revwire?', id: 'revwire' },
   { label: 'When to Engage', id: 'engage' },
   { label: 'How We Work Together', id: 'work-together' },
+  { label: 'Who I Work With', id: 'clients' },
   { label: 'Selected Work', id: 'track-record' },
-  { label: 'About Minari', id: 'about' },
+  { label: 'About', id: 'about' },
 ];
 
 export default function Nav() {
@@ -16,7 +17,7 @@ export default function Nav() {
 
   useEffect(() => {
     const sectionIds = [
-      'revwire', 'engage', 'work-together', 'track-record', 'about', 'contact'
+      'revwire', 'engage', 'work-together', 'clients', 'track-record', 'about', 'contact'
     ];
     const navItems = document.querySelectorAll('[data-section]');
 

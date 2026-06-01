@@ -3,26 +3,11 @@
 import { useEffect, useRef } from 'react';
 
 const ENGAGEMENTS = [
-  {
-    tag: 'AGRITECH AI · NDA',
-    title: 'Customer Narrative for Frontier Labs',
-    desc: 'Built the US farmer-facing positioning and story for an AgriTech AI company. Shaped the customer-facing story for a PE-backed AI startup pitching to large frontier labs in the US.'
-  },
-  {
-    tag: 'SHARKNINJA',
-    title: 'Turnkey M&A Integration Communications',
-    desc: 'Leading strategy and execution for a large M&A integration communications mandate. Project in progress.'
-  },
-  {
-    tag: 'WARBURG PINCUS',
-    title: 'India Market Entry & Regulatory Narrative',
-    desc: 'Anchoring the market entry story and leading the regulatory narrative — from bringing in specialists like APCO through to full narrative planning.'
-  },
-  {
-    tag: 'RECENT ENGAGEMENTS',
-    title: 'Agritech & Fashion Tech AI',
-    desc: 'Working with an agritech AI startup to shape its narrative for US customers, and with a fashion tech AI startup on investor storytelling for fundraising.'
-  },
+  <span key="1">Leading communications strategy and execution for a major private-equity-backed M&amp;A integration.</span>,
+  <span key="2">Anchoring market-entry and regulatory positioning for SharkNinja&apos;s expansion into India.</span>,
+  <span key="3">Building the US customer narrative and trust positioning for an Agritech AI company.</span>,
+  <span key="4">Advising a PE-backed tech company on customer storytelling for large US customers. <span style={{ color: 'rgba(12,14,19,0.38)', fontSize: '0.9em' }}>(NDA)</span></span>,
+  <span key="5">Supporting a fashion-tech AI company on investor communications and fundraising narratives. <span style={{ color: 'rgba(12,14,19,0.38)', fontSize: '0.9em' }}>(NDA)</span></span>,
 ];
 
 export default function WorkSection() {
@@ -66,36 +51,21 @@ export default function WorkSection() {
   }, []);
 
   return (
-    <section id="work" ref={sectionRef} className="bg-[#ece5d4] px-6 md:px-[36px] py-12 md:py-[80px] flex flex-col justify-center min-h-screen page-snap-container">
-      <div className="w-full max-w-[1200px] mx-auto h-full flex flex-col justify-center section-content">
-        <div className="text-[9px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.16em]">
-          SELECTED WORK
-        </div>
-        
-        <div className="text-[14px] text-[rgba(12,14,19,0.50)] mt-6 mb-10 max-w-[600px] font-[400]">
-          Current ongoing engagements across AgriTech, AI, private equity, and consumer products.
-        </div>
-        
+    <section id="work" ref={sectionRef} className="bg-[#ece5d4] px-6 md:px-[36px] pt-12 md:pt-16 pb-20 md:pb-[100px] flex flex-col page-snap-container">
+      <div className="w-full max-w-[1200px] mx-auto flex flex-col section-content">
+        <h3 className="text-[18px] md:text-[22px] font-medium text-[#0c0e13] mb-6">
+          Ongoing Engagements
+        </h3>
         <div className="w-full max-w-[900px] flex flex-col border-t border-[rgba(12,14,19,0.09)]">
           {ENGAGEMENTS.map((engagement, index) => (
             <div 
               key={index} 
               ref={(el) => { rowsRef.current[index] = el; }}
-              className={`work-entry reveal-hidden px-6 -mx-6 flex flex-col md:flex-row gap-2 md:gap-12 py-[24px] border-b border-[rgba(12,14,19,0.09)]`}
+              className={`work-entry reveal-hidden px-6 -mx-6 block py-[22px] border-b border-[rgba(12,14,19,0.09)] relative`}
             >
-              <div className="md:w-[220px] shrink-0 pt-1">
-                <div className="text-[11px] font-[500] text-[#0c0e13] tracking-[0.08em] uppercase">
-                  {engagement.tag}
-                </div>
-              </div>
-              <div className="flex flex-col flex-1">
-                <div className="text-[18px] md:text-[20px] font-medium text-[#0c0e13] leading-[1.3] mb-2">
-                  {engagement.title}
-                </div>
-                <div className="text-[14px] text-[rgba(12,14,19,0.50)] leading-[1.6] font-[400]">
-                  {engagement.desc}
-                </div>
-              </div>
+              <p className="w-full max-w-full pl-0 m-0 text-[14px] text-[rgba(12,14,19,0.60)] leading-[1.6] font-[400]">
+                {engagement}
+              </p>
             </div>
           ))}
           

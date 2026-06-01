@@ -17,6 +17,7 @@ export default function ContactSection() {
       </svg>
       <div className="contact-inner section-content">
         <div className="contact-headline">Let's talk.</div>
+        <p className="contact-sub">Book a Strategic Consultation</p>
         <div className="contact-links">
           <a href="mailto:minarishah@outlook.com" className="contact-link">
             minarishah@outlook.com

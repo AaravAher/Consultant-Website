@@ -9,7 +9,9 @@ import TrackRecordSection from '@/components/TrackRecordSection';
 import CredentialTicker from '@/components/CredentialTicker';
 import EngageSection from '@/components/EngageSection';
 import CommsVisualSection from '@/components/CommsVisualSection';
+import ClientsSection from '@/components/ClientsSection';
 import WorkSection from '@/components/WorkSection';
+import AboutSection from '@/components/AboutSection';
 import ContactSection from '@/components/ContactSection';
 import AvailabilityBadge from '@/components/AvailabilityBadge';
 
@@ -27,10 +29,11 @@ export default function Home() {
         <BriefSection />
         <EngageSection />
         <CommsVisualSection />
+        <ClientsSection />
         <TrackRecordSection />
         <CredentialTicker />
         <WorkSection />
-        <section id="about"></section>
+        <AboutSection />
         <ContactSection />
       </main>
       <AvailabilityBadge />

@@ -41,11 +41,14 @@ export default function TrackRecordSection() {
         {/* Header Section */}
         <div className="px-6 md:px-[48px] max-w-[1100px] mx-auto w-full">
           <div className="text-[11px] uppercase text-[rgba(12,14,19,0.32)] tracking-[0.14em]">
-            TRACK RECORD
+            SELECTED WORK
           </div>
-          <h2 className="text-[28px] md:text-[38px] font-medium text-[#0c0e13] leading-[1.2] max-w-[600px] mt-4 mb-[52px]">
+          <h2 className="text-[28px] md:text-[38px] font-medium text-[#0c0e13] leading-[1.2] max-w-[600px] mt-4 mb-4">
             The work that shaped the practice.
           </h2>
+          <p className="text-[clamp(15px,1.6vw,18px)] text-[rgba(12,14,19,0.60)] leading-[1.6] max-w-[640px] mb-[52px]">
+            The work that shaped how I think about communications today spans three decades across journalism, corporate leadership and strategic advisory.
+          </p>
         </div>
 
         {/* Card Grid */}
@@ -63,7 +66,7 @@ export default function TrackRecordSection() {
             </div>
             
             <div className="text-[13px] text-[rgba(12,14,19,0.60)] leading-[1.65] mb-[24px]">
-              Led the corporate brand reinvention during a period of freefall. Built the design-first, tech-forward, electric mobility narrative that repositioned the company for a new era.
+              Part of the team that repositioned Tata Motors during a critical turnaround, building the design-led, technology-forward narrative that helped support growth and the company's transition towards electric mobility.
             </div>
             
             <div className="mt-auto flex flex-col">
@@ -94,7 +97,7 @@ export default function TrackRecordSection() {
             </div>
             
             <div className="text-[13px] text-[rgba(255,255,255,0.62)] leading-[1.65] mb-[24px]">
-              Helped reshape how India saw online commerce. Built the India reputation narrative, created the Smbhav SMB platform, turned Great Indian Festival into a nationwide moment, and helped homegrown D2C brands scale into household names.
+              Built the India reputation narrative during a period of rapid growth, helping shape engagement with customers, policymakers, regulators, investors and partners. Created the Smbhav platform for SMBs and helped establish Amazon as India's most trusted and largest online marketplace.
             </div>
             
             <div className="mt-auto flex flex-col">
@@ -119,7 +122,7 @@ export default function TrackRecordSection() {
             </div>
             
             <div className="text-[13px] text-[rgba(12,14,19,0.60)] leading-[1.65] mb-[24px]">
-              Built a locally relevant India narrative that helped the brand become the #1 large enterprise, consumer and SMB brand.
+              Built a locally relevant India narrative that helped take Dell from challenger brand to market leader across enterprise, consumer and SMB segments.
             </div>
             
             <div className="mt-auto flex flex-col">
