@@ -386,7 +386,7 @@ html, body {
 .wiww-pill-row {
   display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: 24px;
 }
 
 .wiww-num {
@@ -394,7 +394,7 @@ html, body {
   font-weight: 500;
   letter-spacing: 0.04em;
   color: rgba(12, 14, 19, 0.30);
-  min-width: 32px;
+  min-width: 36px;
   flex-shrink: 0;
   transition: color 260ms ease;
 }
